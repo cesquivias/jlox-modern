@@ -1,0 +1,10 @@
+#+TITLE: Lox with all Java Language Features
+
+The Java interpreter from [[https://craftinginterpreters.com][Crafting Interpreters]] used a relatively minimal (and old) subset of language features. From a pedagological perspective, it makes sense to not distract the reader with fancy, esoteric language features, but I feel the codebase could benefit from some modern Java features.
+
+I don't try to shoehorn every language feature just for the sake of it. I try to use new features where it leads to better code clarity or less code. The main features I've found useful have been:
+
+- Records :: Instead of writing a separate Java program to generate Java code, records provide a concise way of creating struct-like objects.
+- ~var~ local variables :: A simple change to reduce line noise
+- sealed classes :: Helpful for semantic communication that there are only a finite set of subtypes we expect for certain interfaces.    
+   
