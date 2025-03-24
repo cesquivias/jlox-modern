@@ -33,7 +33,6 @@ java {
 }
 
 application {
-    // Define the main class for the application.
     mainClass = "com.craftinginterpreters.lox.Lox"
 }
 

@@ -19,7 +19,7 @@ sealed interface Expr
             return visitor.visit(this);
         }
     }
-    record Grouping(Expr epxr) implements Expr {
+    record Grouping(Expr expr) implements Expr {
         @Override
         public <R> R accept(Visitor<R> visitor) {
             return visitor.visit(this);
