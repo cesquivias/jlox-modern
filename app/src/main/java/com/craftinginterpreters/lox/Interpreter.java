@@ -42,6 +42,15 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor {
     }
 
     @Override
+    public void visit(Stmt.If stmt) {
+        if (isTruthy(evaluate(stmt.test()))) {
+            execute(stmt.then());
+        } else if (stmt._else() != null) {
+            execute(stmt._else());
+        }
+    }
+
+    @Override
     public void visit(Stmt.Expression stmt) {
         evaluate(stmt.expr());
     }
@@ -131,6 +140,19 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor {
     }
 
     @Override
+    public Object visit(Expr.Logical expr) {
+        var left = evaluate(expr.left());
+
+        if (expr.operator().type() == TokenType.OR) {
+            if (isTruthy(left)) return left;
+        } else {
+            if (!isTruthy(left)) return left;
+        }
+
+        return evaluate(expr.right());
+    }
+
+    @Override
     public Object visit(Expr.Unary expr) {
         var right = evaluate(expr.right());
 
@@ -148,6 +170,13 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor {
     @Override
     public Object visit(Expr.Variable expr) {
         return environment.get(expr.identifier());
+    }
+
+    @Override
+    public void visit(Stmt.While stmt) {
+        while(isTruthy(evaluate(stmt.test()))) {
+            execute(stmt.body());
+        }
     }
 
     private void checkNumberOperand(Token operator, Object operand) {

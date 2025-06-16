@@ -27,6 +27,11 @@ class AstPrinter implements Expr.Visitor<String> {
     }
 
     @Override
+    public String visit(Expr.Logical expr) {
+        return null;
+    }
+
+    @Override
     public String visit(Expr.Unary expr) {
         return parenthesize(expr.operator().lexeme(), expr.right());
     }
@@ -35,6 +40,8 @@ class AstPrinter implements Expr.Visitor<String> {
     public String visit(Expr.Variable expr) {
         return null;
     }
+
+
 
     private String parenthesize(String name, Expr... exprs) {
         var builder = new StringBuilder();

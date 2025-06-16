@@ -2,25 +2,27 @@ package com.craftinginterpreters.lox;
 
 import java.util.List;
 
-sealed interface Stmt permits Stmt.Print, Stmt.Expression, Stmt.Block, Stmt.Var {
+sealed interface Stmt permits Stmt.Expression, Stmt.If, Stmt.Block, Stmt.Print, Stmt.Var, Stmt.While {
 
     interface Visitor {
-        void visit(Print stmt);
         void visit(Expression stmt);
+        void visit(If stmt);
         void visit(Block stmt);
+        void visit(Print stmt);
         void visit(Var stmt);
+        void visit(While stmt);
     }
 
     void accept(Visitor visitor);
 
-    record Print(Expr expr) implements Stmt {
+    record Expression(Expr expr) implements Stmt {
         @Override
         public void accept(Visitor visitor) {
             visitor.visit(this);
         }
     }
 
-    record Expression(Expr expr) implements Stmt {
+    record If(Expr test, Stmt then, Stmt _else) implements Stmt {
         @Override
         public void accept(Visitor visitor) {
             visitor.visit(this);
@@ -34,7 +36,21 @@ sealed interface Stmt permits Stmt.Print, Stmt.Expression, Stmt.Block, Stmt.Var 
         }
     }
 
+    record Print(Expr expr) implements Stmt {
+        @Override
+        public void accept(Visitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
     record Var(Token identifier, Expr expr) implements Stmt {
+        @Override
+        public void accept(Visitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    record While(Expr test, Stmt body) implements Stmt {
         @Override
         public void accept(Visitor visitor) {
             visitor.visit(this);
