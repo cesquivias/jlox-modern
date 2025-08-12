@@ -1,8 +1,10 @@
 package com.craftinginterpreters.lox;
 
+import java.util.List;
+
 sealed interface Expr
     permits Expr.Literal, Expr.Logical, Expr.Unary, Expr.Assign, Expr.Binary,
-        Expr.Grouping, Expr.Variable {
+        Expr.Call, Expr.Grouping, Expr.Variable {
 
     interface Visitor<R> {
         R visit(Literal expr);
@@ -10,6 +12,7 @@ sealed interface Expr
         R visit(Unary expr);
         R visit(Assign expr);
         R visit(Binary expr);
+        R visit(Call expr);
         R visit(Grouping expr);
         R visit(Variable expr);
     }
@@ -41,6 +44,12 @@ sealed interface Expr
         }
     }
     record Binary(Expr left, Token operator, Expr right) implements Expr {
+        @Override
+        public <R> R accept(Visitor<R> visitor) {
+            return visitor.visit(this);
+        }
+    }
+    record Call(Expr callee, Token paren, List<Expr> arguments) implements Expr {
         @Override
         public <R> R accept(Visitor<R> visitor) {
             return visitor.visit(this);
